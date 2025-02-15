@@ -19,32 +19,28 @@ export async function GET(request: NextRequest) {
 
   try {
     const query = `
-        query($username: String!) {
-          user(login: $username) {
-            contributionsCollection {
-              contributionCalendar {
-                totalContributions
-                weeks {
-                  contributionDays {
-                    contributionCount
-                    date
-                  }
+      query($username: String!) {
+        user(login: $username) {
+          contributionsCollection {
+            contributionCalendar {
+              totalContributions
+              weeks {
+                contributionDays {
+                  contributionCount
+                  date
                 }
               }
             }
           }
         }
-      `;
+      }
+    `;
 
     const response = await octokit.graphql(query, { username });
-    //   @ts-ignore
     const calendar = response.user.contributionsCollection.contributionCalendar;
 
-    //   Flatten the weeks array to get all contribution days
-
-    // @ts-ignore
+    // Flatten the weeks array to get all contribution days
     const contributions = calendar.weeks.flatMap((week) =>
-      // @ts-ignore
       week.contributionDays.map((day) => ({
         count: day.contributionCount,
         date: day.date,
@@ -52,16 +48,17 @@ export async function GET(request: NextRequest) {
     );
 
     return NextResponse.json({
-        user:{
-            totalContribution:calendar.totalContributions
-        },
-        contributions
-    })
+      user: {
+        totalContribution: calendar.totalContributions,
+      },
+      contributions,
+    });
   } catch (error) {
-    console.error("GITHUB API ERROR" , error)
+    console.error("GITHUB API ERROR", error);
     return NextResponse.json(
-        {error:"Failed to fetch github Data"},
-        {status:500}
-    )
+      { error: "Failed to fetch GitHub Data" },
+      { status: 500 }
+    );
   }
 }
+
