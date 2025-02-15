@@ -1,0 +1,23 @@
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+
+# Build outputs
+build/
+dist/
+.next/
+
+# MacOS specific files
+.DS_Store
+
+# VSCode settings
+.vscode/
+
+# Log files
+*.log
+
+# Operating System files
+Thumbs.db
+ehthumbs.db
